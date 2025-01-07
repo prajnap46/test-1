@@ -30,6 +30,20 @@ pipeline {
                 }
             }
         }
+        stage('Build and tag docker file') {
+            steps {
+                script {
+                    sh "docker build -t prajnap46/project:1 ."
+                }
+            }
+        }
+        stage('Containerisation') {
+            steps {
+                script {
+                    sh "docker run -it -d --name c1 -p 8081:8080 prajnap46/project:1"
+                }
+            }
+        }
     }
 
     post {
