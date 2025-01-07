@@ -40,11 +40,11 @@ pipeline {
         stage('Containerisation') {
             steps {
                 script {
-                    sh "
+                    sh '''
                         docker stop c1
                         docker rm c1
                         docker run -it -d --name c1 -p 8081:8080 prajnap46/project:1
-                    "
+                    '''
                 }
             }
         }
