@@ -63,7 +63,9 @@ pipeline {
         }
         stage('pushing image to repository'){
             steps{ 
+                script{
                 sh 'docker push prajnap46/project:1'
+                }
             }
         }
     }
