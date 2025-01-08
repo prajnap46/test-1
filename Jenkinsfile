@@ -48,6 +48,19 @@ pipeline {
                 }
             }
         }
+        stage(login to docker hub){
+            steps{
+                script{
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_password')])
+                      sh "echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin"
+                }
+            }
+        }
+        stage('pushing image to repository'){
+            steps{ 
+                sh 'docker push prajnap46/project:1'
+            }
+        }
     }
 
     post {
