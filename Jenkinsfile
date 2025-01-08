@@ -65,7 +65,7 @@ pipeline {
             steps {
                 script {
                     sh "docker images"
-                    sh 'docker push prajnap46/project:1'
+                    sh 'docker push 236388/project:1'
                 }
             }
         }
