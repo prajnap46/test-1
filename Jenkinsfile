@@ -33,7 +33,7 @@ pipeline {
         stage('Build and tag docker file') {
             steps {
                 script {
-                    sh "docker build -t prajnap46/project:1 ."
+                    sh "docker build -t 236388/full-stack:1 ."
                 }
             }
         }
@@ -43,7 +43,7 @@ pipeline {
                     sh '''
                         docker stop c1
                         docker rm c1
-                        docker run -it -d --name c1 -p 8081:8080 prajnap46/project:1
+                        docker run -it -d --name c1 -p 8081:8080 236388/full-stack:1
                     '''
                 }
             }
@@ -65,7 +65,7 @@ pipeline {
             steps {
                 script {
                     sh "docker images"
-                    sh 'docker push 236388/full-stack'
+                    sh 'docker push 236388/full-stack:1'
                 }
             }
         }
