@@ -37,6 +37,11 @@ pipeline {
                 }
             }
         }
+        stage('Docker image scan'){
+            steps{
+                sh "trivy image --format table -o trivy-image-report.html 236388/full-stack:1"
+            }
+        }
         stage('Containerisation') {
             steps {
                 script {
