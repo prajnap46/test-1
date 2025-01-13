@@ -1,90 +1,26 @@
 pipeline {
     agent any
-
     tools {
-        jdk 'java-11'  
-        maven 'maven'  
+        jdk "java11"
+        maven "maven"
     }
-
-    stages {
-        stage('Git Checkout') {
-            steps {
-                script {
-                    git branch: 'main', url: 'https://github.com/prajnap46/test-1.git'
-                }
-            }
-        }
-
-        stage('Compile') {
-            steps {
-                script {
-                    sh "mvn compile"
-                }
-            }
-        }
-
-        stage('Build') {
-            steps {
-                script {
-                    sh "mvn package"
-                }
-            }
-        }
-        stage('Build and tag docker file') {
-            steps {
-                script {
-                    sh "docker build -t 236388/full-stack:1 ."
-                }
-            }
-        }
-        stage('Docker image scan'){
+    stages{
+        stage('git checkout'){
             steps{
-                sh "trivy image --format table -o trivy-image-report.html 236388/full-stack:1"
+            git branch: 'main', url: 'https://github.com/prajnap46/test-1.git'
             }
         }
-        stage('Containerisation') {
-            steps {
-                script {
-                    sh '''
-                        docker stop c1
-                        docker rm c1
-                        docker run -it -d --name c1 -p 8081:8080 236388/full-stack:1
-                    '''
-                }
-            }
-        }
-        stage('login to docker hub'){
+        stage('compile the code'){
             steps{
-                script{
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-credentials', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-                    sh '''
-                    echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-                    '''
-                    }
-                }
-                    
-                      
+                sh "mvn compile"
             }
         }
-        stage('Push Image to Docker Repository') {
-            steps {
-                script {
-                    sh "docker images"
-                    sh 'docker push 236388/full-stack:1'
-                }
-            }
-        }
-    }
+        stage('build'){
+            steps{ 
+                sh "mvn clean install"
 
-    post {
-        always {
-            echo "Pipeline finished"
+            }
         }
-        success {
-            echo "Build was successful"
-        }
-        failure {
-            echo "Build failed"
-        }
+
     }
 }
